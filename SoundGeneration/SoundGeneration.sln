@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundGeneration", "SoundGeneration\SoundGeneration.csproj", "{0CCC4084-F6ED-4DF4-8CE5-E5FC2642921F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateWords", "SoundGeneration\GenerateWords.csproj", "{0CCC4084-F6ED-4DF4-8CE5-E5FC2642921F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
