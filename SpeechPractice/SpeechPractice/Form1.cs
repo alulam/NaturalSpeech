@@ -17,9 +17,6 @@ namespace SpeechPractice
         //create a Speech Synthesizer to speak the text input
         SpeechSynthesizer reader = new SpeechSynthesizer();
 
-        //create the object. This object will store your phonetic 'characters'
-       PromptBuilder PBuilder = new PromptBuilder();
-
         public Form1()
         {
             InitializeComponent();
@@ -32,9 +29,9 @@ namespace SpeechPractice
                 reader.Dispose();
                 reader = new SpeechSynthesizer();
 
-                PBuilder = new PromptBuilder();
-                //PBuilder.AppendTextWithPronunciation("a", richTextBox1.Text);
                 reader.SpeakAsync(richTextBox1.Text);
+
+                //write Phoneme to html file
                 ExtractPhoneme extract = new ExtractPhoneme();
                 extract.getPhoneme(richTextBox1.Text);
             }

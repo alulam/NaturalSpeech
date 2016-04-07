@@ -12,21 +12,16 @@ namespace SpeechPractice
 {
     public class ExtractPhoneme
     {
-        public ExtractPhoneme()
-        {
-
-        }
-
         public void getPhoneme(string input)
-        {
-           
+        {      
             // Create a request using a URL that can receive a post. 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://wikspeak.sourceforge.net/cgi-bin/ipa.cgi");
             
             // Set the Method property of the request to POST.
             request.Method = "POST";
             request.KeepAlive = true;
-        
+            
+            //Create boundary for multipart form
             string boundary = CreateFormDataBoundary();
         
             // Set the ContentType property of the WebRequest.
@@ -37,35 +32,59 @@ namespace SpeechPractice
             
             // Write the data to the request stream.
             writeMultiForm(input, dataStream, boundary);
+
+            //Create Footer for multipart form
             byte[] endBytes = Encoding.UTF8.GetBytes("--" + boundary + "--");
             dataStream.Write(endBytes, 0, endBytes.Length);
+            
             // Close the Stream object.
             dataStream.Close();
+
             // Get the response.
             try {
                 WebResponse response = request.GetResponse();
                 // Display the status.
                 Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+                
                 // Get the stream containing content returned by the server.
                 dataStream = response.GetResponseStream();
+                
                 // Open the stream using a StreamReader for easy access.
                 StreamReader reader = new StreamReader(dataStream);
+                
                 // Read the content.
                 string responseFromServer = reader.ReadToEnd();
+                
                 //parse string for phoneme
                 int startOffset = 18;
-                int startLocation =responseFromServer.IndexOf("name=\"ipa\"")+ startOffset;
-             
+                int startLocation = responseFromServer.IndexOf("name=\"ipa\"") + startOffset;
+
                 int endOffset = 2;
-                int endLocation = responseFromServer.IndexOf("readonly")-endOffset;
+                int endLocation = responseFromServer.IndexOf("readonly") - endOffset;
                 int length = endLocation - startLocation;
 
                 string phoneme = responseFromServer.Substring(startLocation, length);
-                Console.Write(phoneme);
+                Console.WriteLine(phoneme);
+
+                //Attempt to convert phoneme to english through code
                 string s = WebUtility.HtmlDecode(phoneme);
-                Console.Write(s);
-                // Display the content.
-                //Console.WriteLine(responseFromServer);
+                Console.WriteLine(s);
+
+                //Remove tick marks
+                phoneme = phoneme.Replace("&#x02c8;", "");
+               
+                //CHANGE TO YOUR OWN WORKING DIRECTORY
+                var currentDirectory = "C:\\Users\\M\\Documents\\Advanced AI\\NaturalSpeech\\SpeechPractice\\SpeechPractice";
+                using (StreamWriter file = new StreamWriter(currentDirectory+ "\\output.html")) { 
+
+                file.WriteLine("<html>");
+                file.WriteLine("<head></head>");
+                file.WriteLine("<body>");
+                file.WriteLine("<p style= \"font-family: Lucida Sans Unicode; \">"+phoneme+ "</p>");
+                file.WriteLine("</body>");
+                file.WriteLine("</html>");
+                file.Close();
+            }
                 // Clean up the streams.
                 reader.Close();
                 dataStream.Close();

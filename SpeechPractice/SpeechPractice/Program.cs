@@ -15,13 +15,12 @@ namespace SpeechPractice
         [STAThread]
         static void Main()
         {
-            FileStream file = new FileStream("test.dat", FileMode.OpenOrCreate, FileAccess.ReadWrite);
             
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
 
-            file.Close();
+            
         }
     }
 }
