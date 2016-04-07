@@ -33,8 +33,10 @@ namespace SpeechPractice
                 reader = new SpeechSynthesizer();
 
                 PBuilder = new PromptBuilder();
-                PBuilder.AppendTextWithPronunciation("a", richTextBox1.Text);
-                reader.SpeakAsync(PBuilder);
+                //PBuilder.AppendTextWithPronunciation("a", richTextBox1.Text);
+                reader.SpeakAsync(richTextBox1.Text);
+                ExtractPhoneme extract = new ExtractPhoneme();
+                extract.getPhoneme(richTextBox1.Text);
             }
             else
             {
