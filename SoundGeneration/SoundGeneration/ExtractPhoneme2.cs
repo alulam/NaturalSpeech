@@ -8,7 +8,7 @@ using System.IO;
 using System.Web;
 
 
-namespace SpeechPractice
+namespace SoundGeneration
 {
     public class ExtractPhoneme
     {
@@ -71,30 +71,11 @@ namespace SpeechPractice
                 string s = WebUtility.HtmlDecode(phoneme);
                 Console.WriteLine(s);
 
-                //Remove tick marks
+                //Remove apostrophes
                 phoneme = phoneme.Replace("&#x02c8;", "");
-               
-                //CHANGE TO YOUR OWN WORKING DIRECTORY
-                var currentDirectory = @"C:\\Users\\M\\Documents\\Advanced AI\\NaturalSpeech\\SpeechPractice\\SpeechPractice";
-                using (StreamWriter file = new StreamWriter(currentDirectory+ "\\output.html")) { 
 
-                    file.WriteLine("<html>");
-                    file.WriteLine("<head></head>");
-                    file.WriteLine("<body>");
-                    file.WriteLine("<p style= \"font-family: Lucida Sans Unicode; \">"+phoneme+ "</p>");
-                    file.WriteLine("</body>");
-                    file.WriteLine("</html>");
-                    file.Close();
-
-                
-                }
-                // Create the file.
-                using (FileStream fs = File.Create(currentDirectory+ "\\" + input + ".txt"))
-                {
-                    Byte[] info = new UTF8Encoding(true).GetBytes("This is some text in the file.");
-                    // Add some information to the file.
-                    fs.Write(info, 0, info.Length);
-                }
+                //Remove colons
+                phoneme = phoneme.Replace(":", "");
 
                 // Clean up the streams.
                 reader.Close();
@@ -107,7 +88,6 @@ namespace SpeechPractice
             {
                 Console.WriteLine("This program is expected to throw WebException on successful run."+
                        "\n\nException Message :" + e.Message);
-               
             }
             return null;
         }
