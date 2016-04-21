@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 using System.Speech.Synthesis;
 using System.IO;
 
-
 namespace SoundGeneration
 {
     class Program
     {
         static void Main(string[] args)
         {
-        
+
             foreach (string word in args)
             //Create wav file for each sound
             {
@@ -25,11 +24,8 @@ namespace SoundGeneration
                         speak.Speak(word);
                     }
                 }
-              //Create phoneme text file for each word
-                
-                //CHANGE TO YOUR OWN WORKING DIRECTORY
-                var currentDirectory = @"C:\\Users\\M\\Documents\\Advanced AI\\NaturalSpeech\\SoundGeneration\\SoundGeneration";
-                using (FileStream file = File.Create(currentDirectory + "\\" + word + ".txt"))
+                //Create phoneme text file for each word                
+                using (FileStream file = File.Create(word + ".txt"))
                 {
                     //call function to extract the phoneme
                     ExtractPhoneme2 extract = new ExtractPhoneme2();
