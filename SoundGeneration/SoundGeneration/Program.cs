@@ -32,7 +32,7 @@ namespace SoundGeneration
                 using (FileStream file = File.Create(currentDirectory + "\\" + word + ".txt"))
                 {
                     //call function to extract the phoneme
-                    ExtractPhoneme extract = new ExtractPhoneme();
+                    ExtractPhoneme2 extract = new ExtractPhoneme2();
                     string phoneme = extract.getPhoneme(word);
 
                     //Encode the phoneme and write  to file

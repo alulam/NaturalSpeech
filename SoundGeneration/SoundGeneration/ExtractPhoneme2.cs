@@ -10,7 +10,7 @@ using System.Web;
 
 namespace SoundGeneration
 {
-    public class ExtractPhoneme
+    public class ExtractPhoneme2
     {
         public string getPhoneme(string input)
         {      
