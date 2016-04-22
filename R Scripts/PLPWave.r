@@ -23,12 +23,15 @@ TrimWav <- function(wav){
 	return(wav[firstOcc:lastOcc])
 }
 
+data <- vector(mode = "list", length=length(args))
+
+
 for(i in 1:length(args)){
-	filePath <- args[i]
-	baseFileName <- basename(file_path_sans_ext(filePath))
-	fileCon <- file(paste(baseFileName, ".csv"), open = "a")
+	fileName <- args[i]	
 	
-	wavObj <- readWave(filePath)
+	## Read in the wave file
+	
+	wavObj <- readWave(paste(fileName, ".wav", sep=""))
 	wav <- wavObj@left
 	sampleRate <- wavObj@samp.rate
 	trimmedWav <- TrimWav(wav)
@@ -37,18 +40,42 @@ for(i in 1:length(args)){
 	aSpec <- audspec(pSpec, sr = sampleRate, nfilts = ceiling(hz2bark(sampleRate/2)) + 1, 
 		fbtype = c("bark", "mel", "htkmel", "fcmel"), minfreq = 0, 
 		maxfreq = sampleRate/2, sumpower = TRUE, bwidth = 1)$aspectrum
-	dimBand <- dim(aSpec)
-	nRow <- dimBand[1]
-	nCol <- dimBand[2]
+	
+	## Read in the characters of the word
+	
+	fileText <- file(paste(fileName, ".txt", sep=""))
+	characters <- readLines(fileText)	
+	close(fileText)	
+	
+	dataVector <- vector(mode="list", length=2)
+	dataVector[[1]] <- aSpec
+	dataVector[[2]] <- characters
+	data[[i]] <- dataVector
+}
 
-	cat(sprintf("Sample Rate,%f", sampleRate), file=fileCon, append = FALSE, sep='\n')
-	cat(sprintf("Window Time,%f", winTime), file=fileCon, append = FALSE, sep='\n')
-	cat(sprintf("Step Time,%f", stepTime), file=fileCon, append = FALSE, sep='\n')
+## baseFileName <- basename(file_path_sans_ext(filePath))
+fileCon <- file(paste("money.csv", sep=""), open = "a")
+
+for(i in 1:length(data)){
+	
+	aSpecOfi <- data[[i]][[1]]
+	demensions <- dim(aSpecOfi)
+	nRow <- demensions[1]
+	nCol <- demensions[2]
+
+	#cat(sprintf("Sample Rate,%f", sampleRate), file=fileCon, append = FALSE, sep='\n')
+	#cat(sprintf("Window Time,%f", winTime), file=fileCon, append = FALSE, sep='\n')
+	#cat(sprintf("Step Time,%f", stepTime), file=fileCon, append = FALSE, sep='\n')
 	
 	for(c in 1:nCol){
-		cat(sprintf("%.2f", aSpec[,c]), file=fileCon, append=TRUE, sep=',')
+		cat(sprintf("%.2f", aSpecOfi[,c]), file=fileCon, append=TRUE, sep=',')
 		cat('\n', file=fileCon, append=TRUE)
 	}
 	
-	close(fileCon)
+	characters <- data[[i]][[2]]
+	
+	cat(characters, file=fileCon, append=TRUE, sep=',')
+	cat('\n', file=fileCon, append=TRUE)	
 }
+
+close(fileCon)

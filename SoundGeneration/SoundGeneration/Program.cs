@@ -25,15 +25,15 @@ namespace SoundGeneration
                     }
                 }
                 //Create phoneme text file for each word                
-                using (FileStream file = File.Create(word + ".txt"))
+                using (FileStream f = new FileStream(word + ".txt", FileMode.Create))
                 {
                     //call function to extract the phoneme
                     ExtractPhoneme2 extract = new ExtractPhoneme2();
                     string phoneme = extract.getPhoneme(word);
 
                     //Encode the phoneme and write  to file
-                    Byte[] info = new UTF8Encoding(true).GetBytes(phoneme);
-                    file.Write(info, 0, info.Length);
+                    Byte[] info = new UTF8Encoding(true).GetBytes(phoneme + "\n");                    
+                    f.Write(info, 0, info.Length);
                 }
             }
         }

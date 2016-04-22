@@ -43,7 +43,7 @@ namespace SoundGeneration
             try {
                 WebResponse response = request.GetResponse();
                 // Display the status.
-                Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+                //Console.WriteLine(((HttpWebResponse)response).StatusDescription);
                 
                 // Get the stream containing content returned by the server.
                 dataStream = response.GetResponseStream();
@@ -64,11 +64,11 @@ namespace SoundGeneration
                 
                 string phoneme = responseFromServer.Substring(startLocation, length);
                 //var encoding = System.Text.GetEncoding(phoneme);
-                Console.WriteLine(phoneme);
+                //Console.WriteLine(phoneme);
 
                 //Attempt to convert phoneme to english through code
                 string s = WebUtility.HtmlDecode(phoneme);
-                Console.WriteLine(s);
+                //Console.WriteLine(s);
 
                 //Remove apostrophes
                 phoneme = phoneme.Replace("&#x02c8;", "");
