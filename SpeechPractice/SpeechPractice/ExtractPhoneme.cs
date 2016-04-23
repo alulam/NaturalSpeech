@@ -73,7 +73,11 @@ namespace SpeechPractice
 
                 //Remove tick marks
                 phoneme = phoneme.Replace("&#x02c8;", "");
-               
+
+                //Add separators
+                var test = addSeparators(phoneme);
+                Console.WriteLine(test);
+
                 //CHANGE TO YOUR OWN WORKING DIRECTORY
                 var currentDirectory = @"C:\\Users\\M\\Documents\\Advanced AI\\NaturalSpeech\\SpeechPractice\\SpeechPractice";
                 using (StreamWriter file = new StreamWriter(currentDirectory+ "\\output.html")) { 
@@ -110,6 +114,26 @@ namespace SpeechPractice
                
             }
             return null;
+        }
+        public static string addSeparators(string input)
+        {
+            StringBuilder output = new StringBuilder();
+            for (int i= 0; i<input.Length; i++)
+            {
+                if (input[i] == '&')
+                {
+                    string value = input.Substring(i, 8);
+                    output.Append(value);
+                    i += 7;
+                }
+                else
+                {
+                    output.Append(input[i]);
+                    output.Append(';');
+                }
+            }   
+         
+            return output.ToString();
         }
         public static string CreateFormDataBoundary()
         {

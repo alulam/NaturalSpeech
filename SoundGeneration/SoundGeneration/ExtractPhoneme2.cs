@@ -76,6 +76,9 @@ namespace SoundGeneration
                 //Remove colons
                 phoneme = phoneme.Replace(":", "");
 
+                //Add separators
+                phoneme = addSeparators(phoneme);
+
                 // Clean up the streams.
                 reader.Close();
                 dataStream.Close();
@@ -89,6 +92,26 @@ namespace SoundGeneration
                        "\n\nException Message :" + e.Message);
             }
             return null;
+        }
+        public static string addSeparators(string input)
+        {
+            StringBuilder output = new StringBuilder();
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i] == '&')
+                {
+                    string value = input.Substring(i, 8);
+                    output.Append(value);
+                    i += 7;
+                }
+                else
+                {
+                    output.Append(input[i]);
+                    output.Append(';');
+                }
+            }
+
+            return output.ToString();
         }
         public static string CreateFormDataBoundary()
         {
