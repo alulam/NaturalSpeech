@@ -6,11 +6,14 @@ parseIPA <- function(file){
   dat <- readChar(file, file.info(file)$size)
   
   if(!is.null(dat)){
-    #remove new line symbol '\r\n'
-    dat <- substr(dat,0,nchar(dat)-2)
-    split <- strsplit(dat, ';')
+    #remove new line symbol '\r\n' if it exists
+    endWord <- substr(dat,nchar(dat)-1, nchar(dat))
+    if(identical(endWord, "\r\n")){
+      dat <- substr(dat,0,nchar(dat)-2)
+    }
   
     #Convert contents to array  
+    split <- strsplit(dat, ';')
     split <- split[[1]]
     finalList <- split
     
