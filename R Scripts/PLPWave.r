@@ -23,9 +23,40 @@ TrimWav <- function(wav){
 	return(wav[firstOcc:lastOcc])
 }
 
+#Function accepts a valid path of a text file, returns an array of 
+#characters that parse the IPA string it was given
+ParseIPA <- function(dat){
+  
+  if(!is.null(dat)){
+    #remove new line symbol '\r\n' if it exists
+    endWord <- substr(dat,nchar(dat)-1, nchar(dat))
+    if(identical(endWord, "\r\n")){
+      dat <- substr(dat,0,nchar(dat)-2)
+    }
+  
+    #Convert contents to array  
+    split <- strsplit(dat, ';')
+    split <- split[[1]]
+    finalList <- split
+    
+    count= 1
+    
+    for (let in split){
+      firstChar <- substr(let,1,1) 
+      if(identical(firstChar,"&")){
+        finalList[count] <- substr(let,4, nchar(let))
+      }
+      count = count +1
+    }
+  }
+  
+ return (finalList)
+}
+
 data <- vector(mode = "list", length=length(args))
 
-
+## Goes through each word and preforms spectrum analysis on the wav
+## Creates a vector of all the 
 for(i in 1:length(args)){
 	fileName <- args[i]	
 	
@@ -45,17 +76,63 @@ for(i in 1:length(args)){
 	
 	fileText <- file(paste(fileName, ".txt", sep=""))
 	characters <- readLines(fileText)	
+	parsedCharacterArray <- ParseIPA(characters)	
 	close(fileText)	
 	
 	dataVector <- vector(mode="list", length=2)
 	dataVector[[1]] <- aSpec
-	dataVector[[2]] <- characters
+	dataVector[[2]] <- parsedCharacterArray
 	data[[i]] <- dataVector
 }
 
 ## baseFileName <- basename(file_path_sans_ext(filePath))
 fileCon <- file(paste("money.csv", sep=""), open = "a")
 
+## Max number of features
+maxRow <- 0
+
+## Calculates the maxmimum number of features
+for(i in 1:length(data)){
+	aSpecOfi <- data[[i]][[1]]
+	demensions <- dim(aSpecOfi)
+	nRow <- demensions[1]
+	if(nRow > maxRow){
+		maxRow = nRow
+	}
+}
+
+## Max number for each feature
+maxFeatures = rep(0, maxRow)
+for(i in 1:length(data)){
+	aSpec <- data[[i]][[1]]
+	demensions <- dim(aSpec)
+	nRow <- demensions[1]
+	cCol <- demensions[2]
+	for(c in 1:cCol){
+		for(r in 1:nRow){
+			if(aSpec[r, c] > maxFeatures[r]){
+				maxFeatures[r] <- aSpec[r, c]
+			}
+		}
+	}
+}
+
+## Normalizes each feature at each time
+for(i in 1:length(data)){
+	aSpec <- data[[i]][[1]]
+	demensions <- dim(aSpec)
+	nRow <- demensions[1]
+	cCol <- demensions[2]
+	for(c in 1:cCol){
+		for(r in 1:nRow){
+			aSpec[r, c] <- aSpec[r, c] / maxFeatures[r]
+		}
+	}
+	data[[i]][[1]] <- aSpec	
+}
+
+## Prints out data
+## For checking to make sure the data is in the correct format
 for(i in 1:length(data)){
 	
 	aSpecOfi <- data[[i]][[1]]
@@ -72,10 +149,31 @@ for(i in 1:length(data)){
 		cat('\n', file=fileCon, append=TRUE)
 	}
 	
-	characters <- data[[i]][[2]]
-	
+	characters <- data[[i]][[2]]	
 	cat(characters, file=fileCon, append=TRUE, sep=',')
-	cat('\n', file=fileCon, append=TRUE)	
+	cat('\n', file=fileCon, append=TRUE)
+		
 }
 
 close(fileCon)
+
+
+## A matrix where the rows are for each feature vector
+## and each column is for a symbol
+weights <- matrix(data=0, nrow=maxRow, ncol=3)
+
+## Do the weight fitting
+## Not currently implemented
+for(i in 1:length(data)){
+	
+	aSpecOfi <- data[[i]][[1]]
+	demensions <- dim(aSpecOfi)
+	nRow <- demensions[1]
+	nCol <- demensions[2]
+	
+	## Iterate through all the time windows
+	for(j in 1:nRow){
+	
+	}
+		
+}
