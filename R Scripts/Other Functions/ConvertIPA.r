@@ -1,5 +1,20 @@
+#Create Unique List of Elements Create functions to add to the list
+#and get the current list contents
+uniqueList <- NULL
+
+getUniqueList <- function(){
+  return (uniqueList)
+}
+
+addToUniqueList <- function(chr){
+  if(!chr %in% uniqueList){
+    uniqueList <<- c(uniqueList, chr)
+  }
+}
+
 #Function accepts a valid path of a text file, returns an array of 
 #characters that parse the IPA string it was given
+  
 parseIPA <- function(file){
     
   #Store File contents into data structure
@@ -22,7 +37,11 @@ parseIPA <- function(file){
     for (let in split){
       firstChar <- substr(let,1,1) 
       if(identical(firstChar,"&")){
-        finalList[count] <- substr(let,4, nchar(let))
+        ipaSymbol <- substr(let,4, nchar(let))
+        finalList[count] <- ipaSymbol
+        addToUniqueList(ipaSymbol)
+      }else{
+        addToUniqueList(firstChar)
       }
       count = count +1
     }
