@@ -23,8 +23,21 @@ TrimWav <- function(wav){
 	return(wav[firstOcc:lastOcc])
 }
 
+uniqueList <- NULL
+
+getUniqueList <- function(){
+  return (uniqueList)
+}
+
+addToUniqueList <- function(chr){
+  if(!chr %in% uniqueList){
+    uniqueList <<- c(uniqueList, chr)
+  }
+}
+
 #Function accepts a valid path of a text file, returns an array of 
 #characters that parse the IPA string it was given
+  
 ParseIPA <- function(dat){
   
   if(!is.null(dat)){
@@ -44,7 +57,11 @@ ParseIPA <- function(dat){
     for (let in split){
       firstChar <- substr(let,1,1) 
       if(identical(firstChar,"&")){
-        finalList[count] <- substr(let,4, nchar(let))
+        ipaSymbol <- substr(let,4, nchar(let))
+        finalList[count] <- ipaSymbol
+        addToUniqueList(ipaSymbol)
+      }else{
+        addToUniqueList(firstChar)
       }
       count = count +1
     }
