@@ -15,10 +15,7 @@ addToUniqueList <- function(chr){
 #Function accepts a valid path of a text file, returns an array of 
 #characters that parse the IPA string it was given
   
-parseIPA <- function(file){
-    
-  #Store File contents into data structure
-  dat <- readChar(file, file.info(file)$size)
+ParseIPA <- function(dat){
   
   if(!is.null(dat)){
     #remove new line symbol '\r\n' if it exists
