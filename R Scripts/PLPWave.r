@@ -25,10 +25,6 @@ TrimWav <- function(wav){
 
 uniqueList <- NULL
 
-getUniqueList <- function(){
-  return (uniqueList)
-}
-
 addToUniqueList <- function(chr){
   if(!chr %in% uniqueList){
     uniqueList <<- c(uniqueList, chr)
@@ -152,45 +148,83 @@ for(i in 1:length(data)){
 ## For checking to make sure the data is in the correct format
 for(i in 1:length(data)){
 	
+	characters <- data[[i]][[2]]	
+	cat(characters, file=fileCon, append=TRUE, sep=',')	
+	cat('\n', file=fileCon, append=TRUE)
+	
 	aSpecOfi <- data[[i]][[1]]
 	demensions <- dim(aSpecOfi)
 	nRow <- demensions[1]
-	nCol <- demensions[2]
-
-	#cat(sprintf("Sample Rate,%f", sampleRate), file=fileCon, append = FALSE, sep='\n')
-	#cat(sprintf("Window Time,%f", winTime), file=fileCon, append = FALSE, sep='\n')
-	#cat(sprintf("Step Time,%f", stepTime), file=fileCon, append = FALSE, sep='\n')
+	nCol <- demensions[2]	
 	
-	for(c in 1:nCol){
-		cat(sprintf("%.2f", aSpecOfi[,c]), file=fileCon, append=TRUE, sep=',')
-		cat('\n', file=fileCon, append=TRUE)
+	sumAspec <- rep(0, nRow)
+	
+	for(r in 1:nRow){
+		for(c in 1:nCol){
+			sumAspec[r] <- sumAspec[r] + aSpecOfi[r, c]		
+		}
 	}
 	
-	characters <- data[[i]][[2]]	
-	cat(characters, file=fileCon, append=TRUE, sep=',')
-	cat('\n', file=fileCon, append=TRUE)
-		
+	data[[i]][[1]] <- sumAspec	
+	
+	cat(sumAspec, file=fileCon, append=TRUE, sep=',')	
+	cat('\n\n', file=fileCon, append=TRUE)		
 }
+
+cat(uniqueList, file=fileCon, append=TRUE, sep='\n')
+cat('\n', file=fileCon, append=TRUE)	
+
+charData <- vector(mode="list", length=length(uniqueList))
+
+for(i in 1:length(charData)){
+	charData[[i]] <- vector(mode="list", length=2)
+	charData[[i]][[1]] <- vector(mode = "list", length=maxRow)	
+	charData[[i]][[2]] <- vector(mode = "list", length=maxRow)
+	for(j in 1:maxRow){
+		#charData[[i]][[1]][j] <- 0
+		#charData[[i]][[2]][j] <- 0
+	}
+}
+
+for(i in 1:length(data)){
+	word <- data[[i]][[2]]
+	featureVector <- data[[i]][[1]]
+	for(j in 1:length(uniqueList)){
+		char <- uniqueList[j]			
+		inArray <- charData[[j]][[1]]
+		outArray <- charData[[j]][[2]]
+		if(char %in% word){
+			for(k in 1:length(featureVector)){			
+				inArray[[k]] <- c(inArray[[k]], featureVector[[k]])
+			}
+		} else {							
+			for(k in 1:length(featureVector)){			
+				outArray[[k]] <- c(outArray[[k]], featureVector[[k]])
+			}	
+		}
+		charData[[j]][[1]] <- inArray
+		charData[[j]][[2]] <- outArray
+	}
+}
+
+for(i in 1:length(uniqueList)){
+	hasChar <- charData[[i]][[1]]
+	hasNotChar <- charData[[i]][[2]]
+	cat(paste(uniqueList[i],','), file=fileCon, append=TRUE, sep='')
+	for(j in 1:length(hasChar)){
+		hasCharVector <- hasChar[[j]]
+		cat(mean(hasCharVector), file=fileCon, append=TRUE, sep='')	 
+		cat(',', file=fileCon, append=TRUE, sep='')
+	}		
+	cat('\n ,', file=fileCon, append=TRUE,sep='')
+	for(j in 1:length(hasNotChar)){
+		hasNotCharVector <- hasNotChar[[j]]	
+		cat(mean(hasNotCharVector), file=fileCon, append=TRUE, sep=',')	
+		cat(',', file=fileCon, append=TRUE, sep='')	
+	}	
+	cat('\n\n', file=fileCon, append=TRUE,sep='')
+}
+
+warnings()
 
 close(fileCon)
-
-
-## A matrix where the rows are for each feature vector
-## and each column is for a symbol
-weights <- matrix(data=0, nrow=maxRow, ncol=3)
-
-## Do the weight fitting
-## Not currently implemented
-for(i in 1:length(data)){
-	
-	aSpecOfi <- data[[i]][[1]]
-	demensions <- dim(aSpecOfi)
-	nRow <- demensions[1]
-	nCol <- demensions[2]
-	
-	## Iterate through all the time windows
-	for(j in 1:nRow){
-	
-	}
-		
-}
