@@ -10,8 +10,14 @@ namespace SoundGeneration
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
+
+            IList<string> args = new List<string>();
+            string s;
+            while((s = Console.ReadLine()) != "%"){
+                args.Add(s);
+            }
 
             foreach (string word in args)
             //Create wav file for each sound

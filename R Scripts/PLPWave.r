@@ -210,21 +210,67 @@ for(i in 1:length(data)){
 for(i in 1:length(uniqueList)){
 	hasChar <- charData[[i]][[1]]
 	hasNotChar <- charData[[i]][[2]]
-	cat(paste(uniqueList[i],','), file=fileCon, append=TRUE, sep='')
+	cat(paste(uniqueList[i],',\n'), file=fileCon, append=TRUE, sep='')
+		
+	cat(paste(uniqueList[i], '|feature', ',mean,'), file=fileCon, append=TRUE, sep='')	
 	for(j in 1:length(hasChar)){
-		hasCharVector <- hasChar[[j]]
-		cat(mean(hasCharVector), file=fileCon, append=TRUE, sep='')	 
+		hasCharVector <- hasChar[[j]]	
+		if(is.null(hasCharVector)){			
+			cat('0', file=fileCon, append=TRUE, sep='')
+		} else {		
+			cat(mean(hasCharVector), file=fileCon, append=TRUE, sep='')
+		}			
 		cat(',', file=fileCon, append=TRUE, sep='')
 	}		
-	cat('\n ,', file=fileCon, append=TRUE,sep='')
-	for(j in 1:length(hasNotChar)){
-		hasNotCharVector <- hasNotChar[[j]]	
-		cat(mean(hasNotCharVector), file=fileCon, append=TRUE, sep=',')	
+	
+	cat('\n', file=fileCon, append=TRUE, sep='')
+	
+	cat(paste(uniqueList[i], '|feature', ',variance,'), file=fileCon, append=TRUE, sep='')	
+	for(j in 1:length(hasChar)){			
+		hasCharVector <- hasChar[[j]]	
+		if(is.null(hasCharVector)){			
+			cat('0', file=fileCon, append=TRUE, sep='')
+		} else {									
+			if(all.equal(length(hasCharVector),1) == TRUE) {
+				cat('0', file=fileCon, append=TRUE, sep='')
+			} else {
+				cat(var(hasCharVector), file=fileCon, append=TRUE, sep='')	
+			}	
+		}			
 		cat(',', file=fileCon, append=TRUE, sep='')	
 	}	
+	
+	cat('\n', file=fileCon, append=TRUE,sep='')
+	
+	cat(paste('!', uniqueList[i], '|feature', ',mean,'), file=fileCon, append=TRUE, sep='')
+	for(j in 1:length(hasNotChar)){
+		hasCharVector <- hasNotChar[[j]]
+		if(is.null(hasCharVector)){			
+			cat('0', file=fileCon, append=TRUE, sep='')
+		} else {
+			cat(mean(hasCharVector), file=fileCon, append=TRUE, sep='')	
+		}		
+		cat(',', file=fileCon, append=TRUE, sep='')
+	}		
+	
+	cat('\n', file=fileCon, append=TRUE, sep='')
+	
+	cat(paste('!', uniqueList[i], '|feature', ',variance,'), file=fileCon, append=TRUE, sep='')	
+	for(j in 1:length(hasNotChar)){			
+		hasCharVector <- hasNotChar[[j]]	
+		if(is.null(hasCharVector)){			
+			cat('0', file=fileCon, append=TRUE, sep='')
+		} else {	
+			if(all.equal(length(hasCharVector),1) == TRUE) {				
+				cat('0', file=fileCon, append=TRUE, sep='')
+			} else {
+				cat(var(hasCharVector), file=fileCon, append=TRUE, sep='')			
+			}
+		}
+		cat(',', file=fileCon, append=TRUE, sep='')	
+	}
+	
 	cat('\n\n', file=fileCon, append=TRUE,sep='')
 }
-
-warnings()
 
 close(fileCon)
