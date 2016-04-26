@@ -212,7 +212,7 @@ for(i in 1:length(uniqueList)){
 	hasNotChar <- charData[[i]][[2]]
 	cat(paste(uniqueList[i],',\n'), file=fileCon, append=TRUE, sep='')
 		
-	cat(paste(uniqueList[i], '|feature', ',mean,'), file=fileCon, append=TRUE, sep='')	
+	cat(paste('feature|', uniqueList[i], ':', ',mean,'), file=fileCon, append=TRUE, sep='')	
 	for(j in 1:length(hasChar)){
 		hasCharVector <- hasChar[[j]]	
 		if(is.null(hasCharVector)){			
@@ -225,7 +225,7 @@ for(i in 1:length(uniqueList)){
 	
 	cat('\n', file=fileCon, append=TRUE, sep='')
 	
-	cat(paste(uniqueList[i], '|feature', ',variance,'), file=fileCon, append=TRUE, sep='')	
+	cat(paste('feature|', uniqueList[i], ':', ',variance,'), file=fileCon, append=TRUE, sep='')	
 	for(j in 1:length(hasChar)){			
 		hasCharVector <- hasChar[[j]]	
 		if(is.null(hasCharVector)){			
@@ -242,7 +242,7 @@ for(i in 1:length(uniqueList)){
 	
 	cat('\n', file=fileCon, append=TRUE,sep='')
 	
-	cat(paste('!', uniqueList[i], '|feature', ',mean,'), file=fileCon, append=TRUE, sep='')
+	cat(paste('feature|!', uniqueList[i], ':', ',mean,'), file=fileCon, append=TRUE, sep='')
 	for(j in 1:length(hasNotChar)){
 		hasCharVector <- hasNotChar[[j]]
 		if(is.null(hasCharVector)){			
@@ -255,7 +255,7 @@ for(i in 1:length(uniqueList)){
 	
 	cat('\n', file=fileCon, append=TRUE, sep='')
 	
-	cat(paste('!', uniqueList[i], '|feature', ',variance,'), file=fileCon, append=TRUE, sep='')	
+	cat(paste('feature|!', uniqueList[i], ':', ',variance,'), file=fileCon, append=TRUE, sep='')	
 	for(j in 1:length(hasNotChar)){			
 		hasCharVector <- hasNotChar[[j]]	
 		if(is.null(hasCharVector)){			
