@@ -14,9 +14,10 @@ namespace SoundGeneration
         {
 
             IList<string> args = new List<string>();
-            string s;
-            while((s = Console.ReadLine()) != "%"){
+            string s = Console.ReadLine();
+            while(!string.IsNullOrEmpty(s)){
                 args.Add(s);
+                s = Console.ReadLine();
             }
 
             foreach (string word in args)
