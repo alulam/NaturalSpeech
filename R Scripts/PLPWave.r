@@ -367,7 +367,7 @@ for(i in 1:length(est)){
 			
 			val <- features[[f]]
 			
-			sumHas <- sumHas + dnorm(val, mean=meanHasChar, sd=sqrt(varHasChar)) * dnorm(val, mean=featureMean, sd=sqrt(featureVar))
+			sumHas <- sumHas + dnorm(val, mean=meanHasChar, sd=sqrt(varHasChar))
 		}
 		
 		sumHasNot <- 0		
@@ -379,7 +379,7 @@ for(i in 1:length(est)){
 			
 			val <- features[[f]]
 			
-			sumHasNot <- sumHasNot + dnorm(val, mean=featureMean, sd=sqrt(featureVar)) * dnorm(val, mean=meanHasNotChar, sd=sqrt(varHasNotChar))
+			sumHasNot <- sumHasNot + dnorm(val, mean=meanHasNotChar, sd=sqrt(varHasNotChar))
 		}
 		
 		totalSum <- log10(sumHas) - log10(sumHasNot)
